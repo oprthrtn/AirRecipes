@@ -1,0 +1,9 @@
+.slick-dots{
+    position: relative;
+    text-align: left;
+}
+
+.slick-dots > li {
+    width: 56px;
+    height: 56px;
+}
