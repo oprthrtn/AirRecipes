@@ -1,24 +1,35 @@
-import headerImg from '../../Images/HeaderImg.png';
-import GroupInput from './GroupInput';
+
+import { connect } from "react-redux";
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import '../../CustomizationAndCSS/Header.css'
-import '../../CustomizationAndCSS/hdr'
 import Container from '@mui/material/Container';
+
+import { GetRecipeDetailsThunkCreator } from '../../redux/reducer';
 import GroupInputContainer from './GroupInput';
-function Header(){
-    return(
-        <Box data-aos="fade-down" id='navbar' sx={{display : 'flex', alignItems : 'center'}}>
-            <Container maxWidth="lg" wrap="wrap" sx={{display : 'flex'}}>
-                <Box id='headerInputBox' sx={{display : 'inline-flex', flexDirection : 'column', textAlign: 'left'}}> 
-                    <Typography  variant="h1" >Air Recipes</Typography>
-                    <Typography variant="body"color="shade50">Best Recipes for Best People</Typography>
-                    <GroupInputContainer/>
+import '../../css/header.css';
+import '../../js/hdr';
+
+function Header() {
+
+    return (
+        <Box id='navbar' sx={{ display: 'flex', alignItems: 'center' }}>
+            <Container maxWidth="lg" sx={{ display: 'flex' }}>
+
+                <Box id='headerInputBox' sx={{ textAlign: 'left' }}>
+                    <Typography variant="h1" color="base0">Air Recipes</Typography>
+                    <Typography variant="body" color="shade50">Best Recipes for Best People</Typography>
+                    <GroupInputContainer />
                 </Box>
+
             </Container>
         </Box>
     );
 }
 
-export default Header;
+function mapStateToProps(state) {
+    return { choosenRecipe: state.recipesPage.choosenRecipe }
+}
+
+const HeaderContainer = connect(mapStateToProps, { GetRecipeDetailsThunkCreator })(Header);
+export default HeaderContainer;

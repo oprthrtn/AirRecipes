@@ -1,15 +1,13 @@
-import {airRecipesAPI} from '../API/AirRecipesAPI';
+import {airRecipesAPI} from '../api/airRecipesAPI';
 
 const GET_RECIPES_LIST = "GET_RECIPES_LIST";
-const GET_RECIPE_DETAILS = "GET_RECIPE_DETAILS";
-const CLEAR_RECIPE_DETAILS = 'CLEAR_RECIPE_DETAILS';
+const SET_RECIPE_DETAILS = "SET_RECIPE_DETAILS";
+const SET_FILTER = 'SET_FILTER';
 
-const FILTER_TITLE_RECIPES_LIST = 'FILTER_TITLE_RECIPES_LIST';
 const SET_CUISINE_TAGS = 'SET_CUISINE_TAGS';
-const SET_FILTER_RECIPES_LIST = 'SET_FILTER_RECIPES_LIST';
-const CHANGE_CUISINE_TAG = 'CHANGE_CUISINE_TAG';
+const APPLY_FILTER = 'APPLY_FILTER';
 
-const SET_CALORIES_BORDER = 'SET_CALORIES_BORDER';
+const SET_MAX_MIN_CALORIES = 'SET_MAX_MIN_CALORIES';
 const SET_kCal ='SET_kCal';
 
 const initialState = {
@@ -34,28 +32,20 @@ export function recipesReducer(state = initialState, action) {
             newState.listOfRecipes = action.value;
             newState.filtredListOfRecipes = action.value
             return newState;
-        case GET_RECIPE_DETAILS:
-            newState.choosenRecipe = action.value
+        case SET_RECIPE_DETAILS:
+            newState.choosenRecipe = action.value 
             return newState;
-        case CLEAR_RECIPE_DETAILS:
-            newState.choosenRecipe = action.value
-            return newState;
-        case FILTER_TITLE_RECIPES_LIST:
+        case SET_FILTER: 
             newState.filter = action.value;
             return newState;
-        case SET_FILTER_RECIPES_LIST:
+        case APPLY_FILTER:
             newState.filtredListOfRecipes = action.value;
             return newState;
-        case SET_CUISINE_TAGS:
-            
+        case SET_CUISINE_TAGS: 
             fltr.allCuisines = action.value;
             newState.filter = fltr;
-
             return newState;
-        case CHANGE_CUISINE_TAG:
-            newState.filter = action.value;
-            return newState;
-        case SET_CALORIES_BORDER:
+        case SET_MAX_MIN_CALORIES:
             fltr.calories = action.value;
             newState.filter = fltr;
             return newState;
@@ -75,30 +65,16 @@ function GetRecipesListActionCreator(value) {
     };
 }
 
-function GetRecipeDetailsActionCreator(value) {
+function SetRecipeDetailsActionCreator(value) {
     return {
-        type : GET_RECIPE_DETAILS,
+        type : SET_RECIPE_DETAILS,
         value : value
     };
 }
 
-function ClearRecipeDetailsActionCreator() {
+function ApplyFilterActionCreator(value) {
     return {
-        type : CLEAR_RECIPE_DETAILS,
-        value : {}
-    };
-}
-
-function FilterTitleRecipesListActionCreator(value) {
-    return {
-        type : FILTER_TITLE_RECIPES_LIST,
-        value : value
-    };
-}
-
-function SetFilterRecipesListActionCreator(value) {
-    return {
-        type : SET_FILTER_RECIPES_LIST,
+        type : APPLY_FILTER,
         value : value
     };
 }
@@ -110,16 +86,16 @@ function SetCuisinesTagsActionCreator(value) {
     };
 }
 
-function ChangeCuisineTagActionCreator(value){
+function SetFilterActionCreator(value){
     return {
-        type : CHANGE_CUISINE_TAG,
+        type : SET_FILTER,
         value : value
     };
 }
 
-function SetCaloriesActionCreator(value){
+function SetMaxMinCaloriesActionCreator(value){
     return {
-        type : SET_CALORIES_BORDER,
+        type : SET_MAX_MIN_CALORIES,
         value : value
     };
 }
@@ -130,11 +106,24 @@ function SetkCalActionCreator(value){
         value : value
     };
 }
+
+
+
+function convertSecToMinOrHrs(seconds){
+    let minutes = seconds / 60;
+    return minutes >= 60 ? `${minutes / 60} hours` :`${minutes} min`;
+}
+
 export function GetRecipesListThunkCreator(){
     return(dispatch) => {
         airRecipesAPI.GetRecipesList().then(response => {
             if(response.status === 200){
                 response = response.data.recipes;
+
+                for(let recipe of response){
+                    recipe.cookTime = convertSecToMinOrHrs(recipe.cookTime);
+                }
+                
                 dispatch(SetCuisinesTagsAndCaloriesThunkCreator(response));
                 dispatch(GetRecipesListActionCreator(response));
             }
@@ -148,7 +137,8 @@ export function GetRecipeDetailsThunkCreator(recipeId){
 
             if(response.status === 200){
                 response = response.data.recipe;
-                dispatch(GetRecipeDetailsActionCreator(response));
+                response.cookTime = convertSecToMinOrHrs(response.cookTime);
+                dispatch(SetRecipeDetailsActionCreator(response));
             }
         })
     }
@@ -156,23 +146,12 @@ export function GetRecipeDetailsThunkCreator(recipeId){
 
 export function ClearRecipeDetailsThunkCreator(){
     return(dispatch) => {
-        dispatch(ClearRecipeDetailsActionCreator());
+        dispatch(SetRecipeDetailsActionCreator({}));
     }
 }
 
 
-
-export function FilterTitleRecipesListThunkCreator(filter, title, listOfRecipes){
-    return(dispatch) => {
-        let newFilter = {...filter}
-        newFilter.title = title;
-        dispatch(FilterTitleRecipesListActionCreator(newFilter));
-        dispatch(SetFilterRecipesListThunkCreator(newFilter, listOfRecipes));
-    }
-}
-
-export function SetFilterRecipesListThunkCreator(filter, listOfRecipes){
-    console.log(filter)
+export function ApplyFilterThunkCreator(filter, listOfRecipes){
     return(dispatch) => {
         let filtredListOfRecipes = listOfRecipes.filter((recipe) => {
 
@@ -183,9 +162,19 @@ export function SetFilterRecipesListThunkCreator(filter, listOfRecipes){
             return false;
         })
 
-        dispatch(SetFilterRecipesListActionCreator(filtredListOfRecipes));
+        dispatch(ApplyFilterActionCreator(filtredListOfRecipes));
     }
 }
+
+export function SetTitleInFilterThunkCreator(filter, title, listOfRecipes){
+    return(dispatch) => {
+        let newFilter = {...filter}
+        newFilter.title = title;
+        dispatch(SetFilterActionCreator(newFilter));
+        dispatch(ApplyFilterThunkCreator(newFilter, listOfRecipes));
+    }
+}
+
 
 export function SetCuisinesTagsAndCaloriesThunkCreator(listOfRecipes){
     return(dispatch) => {
@@ -198,7 +187,9 @@ export function SetCuisinesTagsAndCaloriesThunkCreator(listOfRecipes){
 
         let maxCaloricity = Math.max(...listOfRecipes.map(recipe => recipe.caloricity));
         let minCaloricity = Math.min(...listOfRecipes.map(recipe => recipe.caloricity));
-        dispatch(SetCaloriesActionCreator([minCaloricity, maxCaloricity]));
+
+        dispatch(SetkCalActionCreator([minCaloricity, maxCaloricity]))
+        dispatch(SetMaxMinCaloriesActionCreator([minCaloricity, maxCaloricity]));
         dispatch(SetCuisinesTagsActionCreator(cuisinesTags));
     }
 }
@@ -209,10 +200,23 @@ export function ChangeCuisineTagThunkCreator(filter, cuisineTag){ //bruh
         let newCuisines = {...newFilter.allCuisines}
         newCuisines[cuisineTag] = !newCuisines[cuisineTag];
         newFilter.allCuisines =  newCuisines
-        dispatch(ChangeCuisineTagActionCreator(newFilter));
+        dispatch(SetFilterActionCreator(newFilter));
     }
 }
 
+export function SetToDefaultCuisinesTagsThunkCreator(filter){
+    return(dispatch) => {
+        let newFilter = {...filter};
+        let newCuisines = {...newFilter.allCuisines}
+
+        for(let tag in newCuisines){
+            newCuisines[tag] = true;
+        }
+
+        newFilter.allCuisines =  newCuisines
+        dispatch(SetFilterActionCreator(newFilter));
+    }
+}
 
 export function SetkCalThunkCreator(value){ 
     return(dispatch) => {

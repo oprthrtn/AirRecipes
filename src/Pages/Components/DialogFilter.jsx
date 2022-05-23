@@ -10,10 +10,14 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, Checkbox } from '@mui/material';
+import { Box } from '@mui/material';
 import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
 import Slider from '@mui/material/Slider';
-import { ChangeCuisineTagThunkCreator, SetFilterRecipesListThunkCreator, SetkCalThunkCreator} from '../../Redux/reducer';
+import Fade from '@mui/material/Fade';
+
+import { SetToDefaultCuisinesTagsThunkCreator, ApplyFilterThunkCreator, SetkCalThunkCreator } from '../../redux/reducer';
+import CuisineCheckboxes from './CuisineCheckboxes';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -28,7 +32,7 @@ const BootstrapDialogTitle = (props) => {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+    <DialogTitle variant="h3" sx={{ ml: '32px', mt: '32px', mb: '28px', p: 0 }} {...other}>
       {children}
       {onClose ? (
         <IconButton
@@ -56,106 +60,119 @@ BootstrapDialogTitle.propTypes = {
 
 export default function CustomizedDialogs(props) {
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [filterIsChanged, setFilterIsChanged] = useState(false);
   const dispatch = useDispatch();
-  
   const minDistance = 150;
   const minMaxVal = props.filter.calories;
 
-  const handleClickOpen = () => {
+  function handleClickOpen() {
     setOpen(true);
   };
-  const handleClose = () => {
+
+  function handleClose() {
     setOpen(false);
   };
 
-  function showRecipes(){
-    dispatch(SetFilterRecipesListThunkCreator(props.filter, props.listOfRecipes));
+  function showRecipes() {
+    dispatch(ApplyFilterThunkCreator(props.filter, props.listOfRecipes));
     setOpen(false);
   }
 
-  function changeCheckbox(cuisineTag){
-    dispatch(ChangeCuisineTagThunkCreator(props.filter, cuisineTag))
-  }
+  const [calories, setCalories] = useState(props.filter.calories);
 
-  const [value1, setValue1] = React.useState(props.filter.calories);
-
-  const handleChange1 = (event, newValue, activeThumb) => {
+  function handleChangeCheckBox(event, newValue, activeThumb) {
     if (!Array.isArray(newValue)) {
       return;
     }
 
+    setFilterIsChanged(true);
     if (activeThumb === 0) {
-      setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
+      setCalories([Math.min(newValue[0], calories[1] - minDistance), calories[1]]);
     } else {
-      setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
+      setCalories([calories[0], Math.max(newValue[1], calories[0] + minDistance)]);
     }
   };
 
   function setCurrentkCal() {
-    dispatch(SetkCalThunkCreator(value1))
+    dispatch(SetkCalThunkCreator(calories))
   }
 
-  React.useEffect(() => {
-    setValue1(props.filter.calories)
+  function resetFilter() {
+    dispatch(SetToDefaultCuisinesTagsThunkCreator(props.filter))
+    dispatch(SetkCalThunkCreator(props.filter.calories))
+    setCalories(props.filter.calories);
+    setFilterIsChanged(false)
+  }
+
+  useEffect(() => {
+    setCalories(props.filter.calories)
   }, [props.filter.calories])
 
+
   return (
-    <div>
+    <div >
       <IconButton
         onClick={handleClickOpen}
-        aria-label="delete" 
+        aria-label="delete"
         size="large"
         sx={{
-            border : 1,
-            backgroundColor : 'white',
-            borderColor : 'shade40',
-            m : 3
+          border: 1,
+          backgroundColor: 'white',
+          borderColor: 'shade40',
+          m: 3
         }}
       >
-        <FilterListIcon fontSize="inherit"/>
+        <FilterListIcon />
       </IconButton>
 
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
-        maxWidth='sm' 
-        fullWidth={true} 
+        maxWidth='xs'
+        fullWidth={true}
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           Filter
         </BootstrapDialogTitle>
 
-        <DialogContent >
-          {Object.keys(props.filter.allCuisines).map((cuisine, index) => {
-            return(
-              <Box key={index} sx={{display : 'flex', alignItems: 'center'}}>
-                <Typography>
-                  {cuisine}
-                </Typography>
-                <Checkbox 
-                  checked={props.filter.allCuisines[cuisine]}
-                  onClick={() => {changeCheckbox(cuisine)}}
-                  ></Checkbox>
-              </Box>)
-          })}
+        <DialogContent style={{ overflow: "hidden", padding: 0 }}>
+          <CuisineCheckboxes filter={props.filter} setFilterIsChanged={setFilterIsChanged} />
 
-          <Box sx={{ width: 300 }}>
-            <Slider 
+          <Box sx={{ mx: '32px', mt: '72px' }}>
+            <Slider
               valueLabelDisplay='on'
-              value={value1}
+              value={calories}
               min={minMaxVal[0]}
               max={minMaxVal[1]}
-              onChange={handleChange1}
+              onChange={handleChangeCheckBox}
               onChangeCommitted={setCurrentkCal}
               disableSwap
             />
+            <Typography variant="body" color="base0">Calories, kCal</Typography>
           </Box>
+
         </DialogContent>
 
-        <DialogActions>
-          <Button autoFocus onClick={showRecipes}>
+        <DialogActions style={{ padding: 0, margin: '62px 32px 32px 32px', justifyContent: 'space-between' }}>
+
+          <Fade in={filterIsChanged}>
+            <Button
+              autoFocus
+              onClick={resetFilter}
+              variant="outlined"
+              style={{ color: '#82786A', borderColor: '#82786A' }}
+            >
+              <Typography variant="body">Clear</Typography>
+            </Button>
+          </Fade>
+
+          <Button
+            autoFocus onClick={showRecipes}
+            variant="contained"
+            style={{ backgroundColor: '#82786A' }}
+          >
             Show Recipes
           </Button>
         </DialogActions>

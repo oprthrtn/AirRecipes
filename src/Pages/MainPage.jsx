@@ -1,71 +1,78 @@
-import { connect } from "react-redux";
-import Grid from '@mui/material/Grid';
-import RecipeCard from './Components/RecipeCard';
-import Container from '@mui/material/Container';
-import Header from './Components/Header';
-import {GetRecipesListThunkCreator, SetFilterRecipesListThunkCreator} from "../Redux/reducer";
 import { useEffect } from "react";
-import Skeleton from '@mui/material/Skeleton';
-import {
-    BrowserRouter,
-    Route,
-    Routes
-  } from "react-router-dom";
-import RecipeDetails from "./Components/RecipeDetails";
-import ImageSlider from "./Components/ImageSlider";
+
+import { connect } from "react-redux";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import Grid from '@mui/material/Grid';
+import { Skeleton } from "@mui/material";
+import Container from '@mui/material/Container';
+
+import RecipeCard from './components/RecipeCard';
+import HeaderContainer from './components/Header';
+import RecipeDetails from "./components/RecipeDetails";
+import { GetRecipesListThunkCreator } from "../redux/reducer";
 
 
-function MainPage(props){
+
+const cardStyle = { width: 348, height: 384, borderRadius: "8px"};
+
+function MainPage(props) {
+
     useEffect(() => {
         props.GetRecipesListThunkCreator()
     }, [])
 
-    let listOfRecipes = props.mainPage.filtredListOfRecipes;
+    let filtredlistOfRecipes = props.mainPage.filtredListOfRecipes;
     let choosenRecipe = props.mainPage.choosenRecipe;
-    return(
+
+    return (
         <div>
-            <Header/>
-            <Container id='content' maxWidth="lg" wrap="wrap" sx={{mt : "32px", mb : "32px", display : 'flex'}}>
-                <Grid container >
+            <HeaderContainer />
+
+            <Container id='content' >
+                <Grid container  sx={{gap : '24px 20px'}}>
                     <BrowserRouter>
                         <Routes>
-                            <Route path ='/' element={
-                                 
-                                    listOfRecipes.length ? (
-                                        listOfRecipes.map(recipe => {
-                                            return(<RecipeCard recipe={recipe} key={recipe.id} />)
-                                        })
-                                    ) : (
-                                        <div></div>
-                                    )
-                                
-                            }/>
-                            {
-                                listOfRecipes.length ? (
-                                    listOfRecipes.map(recipe => {
-                                        return(
-                                            <Route 
-                                                path={'/' + recipe.id} 
-                                                key={recipe.id} 
-                                                element={<RecipeDetails id={recipe.id} details={choosenRecipe}/>}/>
-                                            )
+                            <Route path='/' element={
+                                props.mainPage.listOfRecipes.length ? (
+                                    filtredlistOfRecipes.map(recipe => {
+                                        return (<RecipeCard cardStyle={cardStyle} recipe={recipe} key={recipe.id} />)
                                     })
                                 ) : (
-                                    <Route path={'/'}/>
+                                    <div style={{ display: 'flex' }}>
+                                        <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
+                                        <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
+                                        <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
+                                    </div>
+                                )
+
+                            } />
+                            {
+                                props.mainPage.listOfRecipes.length ? (
+                                    props.mainPage.listOfRecipes.map(recipe => {
+                                        return (
+                                            <Route
+                                                path={'/' + recipe.id}
+                                                key={recipe.id}
+                                                element={<RecipeDetails id={recipe.id} details={choosenRecipe} />} 
+                                            />
+                                        )
+                                    })
+                                ) : (
+                                    <Route path={'/'} />
                                 )
                             }
-                            
                         </Routes>
                     </BrowserRouter>
                 </Grid>
             </Container>
         </div>
-        
     );
 }
 
-function mapStateToProps(state){
-    return {mainPage : state.recipesPage}
+function mapStateToProps(state) {
+    return { mainPage: state.recipesPage }
 }
-const MainPageContainer = connect(mapStateToProps, {GetRecipesListThunkCreator}) (MainPage);
+
+const MainPageContainer = connect(mapStateToProps, { GetRecipesListThunkCreator })(MainPage);
 export default MainPageContainer;
