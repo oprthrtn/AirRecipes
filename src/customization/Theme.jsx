@@ -52,7 +52,7 @@ export const theme = createTheme({
             lineHeight: '11px'
         }
     },
-    palette: { ...plt },
+    palette: {...plt},
     components: {
         MuiSlider: {
             styleOverrides: {
@@ -123,5 +123,17 @@ export const theme = createTheme({
                 }
             }
         },
+        MuiIconButton : {
+            styleOverrides: {
+                root: {
+                    transition : '0.1s',
+                    '&:hover ': {
+                    
+                       backgroundColor : plt.shade20
+                    },
+                    
+                }
+            }
+        }
     }
 });

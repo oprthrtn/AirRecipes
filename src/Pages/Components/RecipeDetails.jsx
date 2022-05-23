@@ -46,8 +46,11 @@ function RecipeDetails(props) {
   const details = props.details;
 
   useEffect(() => {
-    dispatch(ClearRecipeDetailsThunkCreator());
+    
     dispatch(GetRecipeDetailsThunkCreator(props.id));
+    return () => {
+      dispatch(ClearRecipeDetailsThunkCreator());
+    }
   }, [])
 
   return (

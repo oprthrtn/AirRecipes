@@ -16,7 +16,7 @@ function RecipeCard(props) {
   let navigate = useNavigate();
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
 
-  function click(navigate, recipeId) {
+  function click(recipeId) {
     navigate('/' + recipeId, { replace: false });
   }
 
@@ -30,7 +30,7 @@ function RecipeCard(props) {
 
   return (
     <Fade in={true}>
-      <CardActionArea sx={props.cardStyle} onClick={() => { click(navigate, props.recipe.id) }}>
+      <CardActionArea sx={props.cardStyle} onClick={() => { click(props.recipe.id) }}>
         <Card sx={props.cardStyle}>
 
           {

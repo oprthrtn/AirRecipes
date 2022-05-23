@@ -1,5 +1,5 @@
 import './css/App.css';
-import { ThemeProvider } from '@emotion/react';
+import { ThemeProvider } from '@mui/material/styles';
 import {theme} from './customization/Theme';
 import MainPageContainer from './Pages/MainPage';
 

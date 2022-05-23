@@ -18,8 +18,10 @@ import Fade from '@mui/material/Fade';
 
 import { SetToDefaultCuisinesTagsThunkCreator, ApplyFilterThunkCreator, SetkCalThunkCreator } from '../../redux/reducer';
 import CuisineCheckboxes from './CuisineCheckboxes';
+import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
@@ -59,7 +61,7 @@ BootstrapDialogTitle.propTypes = {
 
 
 export default function CustomizedDialogs(props) {
-
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [filterIsChanged, setFilterIsChanged] = useState(false);
   const dispatch = useDispatch();
@@ -76,6 +78,7 @@ export default function CustomizedDialogs(props) {
 
   function showRecipes() {
     dispatch(ApplyFilterThunkCreator(props.filter, props.listOfRecipes));
+    navigate('/', { replace: false });
     setOpen(false);
   }
 
@@ -114,16 +117,17 @@ export default function CustomizedDialogs(props) {
     <div >
       <IconButton
         onClick={handleClickOpen}
-        aria-label="delete"
+        aria-label="filter"
         size="large"
+        focusRipple={false}
         sx={{
           border: 1,
           backgroundColor: 'white',
-          borderColor: 'shade40',
+          borderColor: 'shade20',
           m: 3
         }}
       >
-        <FilterListIcon />
+        <FilterListIcon  sx={{color : 'base0'}}/>
       </IconButton>
 
       <BootstrapDialog

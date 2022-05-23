@@ -11,11 +11,12 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 
 import CustomizedDialogs from './DialogFilter';
 import { SetTitleInFilterThunkCreator } from '../../redux/reducer';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function GroupInput(props) {
-
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const inputRef = useRef();
@@ -25,6 +26,7 @@ function GroupInput(props) {
     function handleKeyPress(e) {
         if (e.key === 'Enter') {
             dispatch(SetTitleInFilterThunkCreator(props.filter, inputRef.current.value, props.listOfRecipes));
+            navigate('/', { replace: false });
         }
     }
 
@@ -35,6 +37,7 @@ function GroupInput(props) {
     function clearInput() {
         inputRef.current.value = "";
         setInputEmpty(false)
+        dispatch(SetTitleInFilterThunkCreator(props.filter, inputRef.current.value, props.listOfRecipes));
     }
 
     return (

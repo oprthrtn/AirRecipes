@@ -24,14 +24,13 @@ function MainPage(props) {
 
     let filtredlistOfRecipes = props.mainPage.filtredListOfRecipes;
     let choosenRecipe = props.mainPage.choosenRecipe;
-
     return (
-        <div>
+        <BrowserRouter>
             <HeaderContainer />
 
             <Container id='content' >
                 <Grid container  sx={{gap : '24px 20px'}}>
-                    <BrowserRouter>
+                    
                         <Routes>
                             <Route path='/' element={
                                 props.mainPage.listOfRecipes.length ? (
@@ -63,10 +62,10 @@ function MainPage(props) {
                                 )
                             }
                         </Routes>
-                    </BrowserRouter>
+                    
                 </Grid>
             </Container>
-        </div>
+        </BrowserRouter>
     );
 }
 
