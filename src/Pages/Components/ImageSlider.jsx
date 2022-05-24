@@ -7,7 +7,7 @@ import '../../css/imageSlider.css'
 function ImageSlider(props) {
   const settings = {
     customPaging: function (i) {
-      return (<img src={props.images[i]} height='56px' width='56px' />);
+      return (<img alt={`paggingImg${i}`} src={props.images[i]} height='56px' width='56px' />);
     },
     dots: true,
     dotsClass: "slick-dots slick-thumb",
@@ -22,7 +22,7 @@ function ImageSlider(props) {
       {props.images.map((img, index) => {
         return (
           <div key={index}>
-            <img src={img} style={{ width: '100%', height: 'auto', maxHeight: '355px' }} />
+            <img src={img} alt={`img${index}`} style={{ width: '100%', height: 'auto', maxHeight: '355px' }} />
           </div>
         )
       })}

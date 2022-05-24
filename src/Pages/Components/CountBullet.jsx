@@ -4,7 +4,9 @@ export function CountBullet(props) {
     return (
         <Box
             sx={{
-                border: '1px solid #DDDDDD',
+
+                border: '1px solid',
+                borderColor: 'shade20.main',
                 borderRadius: '50%',
                 minWidth: '16px',
                 minHeight: '16px',
@@ -14,6 +16,7 @@ export function CountBullet(props) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 mr: '8px',
+                
             }}
         >{props.children}
         </Box>

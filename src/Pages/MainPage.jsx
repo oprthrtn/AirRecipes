@@ -14,12 +14,12 @@ import { GetRecipesListThunkCreator } from "../redux/reducer";
 
 
 
-const cardStyle = { width: 348, height: 384, borderRadius: "8px"};
+const cardStyle = { width: 348, height: 384, borderRadius: "8px" };
 
 function MainPage(props) {
 
     useEffect(() => {
-        props.GetRecipesListThunkCreator()
+        props.GetRecipesListThunkCreator();
     }, [])
 
     let filtredlistOfRecipes = props.mainPage.filtredListOfRecipes;
@@ -29,40 +29,40 @@ function MainPage(props) {
             <HeaderContainer />
 
             <Container id='content' >
-                <Grid container  sx={{gap : '24px 20px'}}>
-                    
-                        <Routes>
-                            <Route path='/' element={
-                                props.mainPage.listOfRecipes.length ? (
-                                    filtredlistOfRecipes.map(recipe => {
-                                        return (<RecipeCard cardStyle={cardStyle} recipe={recipe} key={recipe.id} />)
-                                    })
-                                ) : (
-                                    <div style={{ display: 'flex' }}>
-                                        <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
-                                        <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
-                                        <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
-                                    </div>
-                                )
+                <Grid container sx={{ gap: '24px 20px' }}>
 
-                            } />
-                            {
-                                props.mainPage.listOfRecipes.length ? (
-                                    props.mainPage.listOfRecipes.map(recipe => {
-                                        return (
-                                            <Route
-                                                path={'/' + recipe.id}
-                                                key={recipe.id}
-                                                element={<RecipeDetails id={recipe.id} details={choosenRecipe} />} 
-                                            />
-                                        )
-                                    })
-                                ) : (
-                                    <Route path={'/'} />
-                                )
-                            }
-                        </Routes>
-                    
+                    <Routes>
+                        <Route path='/' element={
+                            props.mainPage.listOfRecipes.length ? (
+                                filtredlistOfRecipes.map(recipe => {
+                                    return (<RecipeCard cardStyle={cardStyle} recipe={recipe} key={recipe.id} />)
+                                })
+                            ) : (
+                                <div style={{ display: 'flex' }}>
+                                    <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
+                                    <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
+                                    <Skeleton animation="wave" variant='rectangular' sx={cardStyle}></Skeleton>
+                                </div>
+                            )}
+                        />
+
+                        {
+                            props.mainPage.listOfRecipes.length ? (
+                                props.mainPage.listOfRecipes.map(recipe => {
+                                    return (
+                                        <Route
+                                            path={'/' + recipe.id}
+                                            key={recipe.id}
+                                            element={<RecipeDetails id={recipe.id} details={choosenRecipe} />}
+                                        />
+                                    )
+                                })
+                            ) : (
+                                <Route path={'/'} />
+                            )
+                        }
+                    </Routes>
+
                 </Grid>
             </Container>
         </BrowserRouter>

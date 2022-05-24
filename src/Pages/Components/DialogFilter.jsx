@@ -21,7 +21,7 @@ import CuisineCheckboxes from './CuisineCheckboxes';
 import { useNavigate } from 'react-router-dom';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  
+
   '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
@@ -44,7 +44,7 @@ const BootstrapDialogTitle = (props) => {
             position: 'absolute',
             right: 8,
             top: 8,
-            color: (theme) => theme.palette.grey[500],
+            color: (theme) => 'shade50',
           }}
         >
           <CloseIcon />
@@ -122,12 +122,12 @@ export default function CustomizedDialogs(props) {
         focusRipple={false}
         sx={{
           border: 1,
-          backgroundColor: 'white',
-          borderColor: 'shade20',
+          backgroundColor: 'base1.main',
+          borderColor: 'shade20.main',
           m: 3
         }}
       >
-        <FilterListIcon  sx={{color : 'base0'}}/>
+        <FilterListIcon sx={{ color: 'base0.main' }} />
       </IconButton>
 
       <BootstrapDialog
@@ -154,7 +154,7 @@ export default function CustomizedDialogs(props) {
               onChangeCommitted={setCurrentkCal}
               disableSwap
             />
-            <Typography variant="body" color="base0">Calories, kCal</Typography>
+            <Typography variant="body" color="base0.main">Calories, kCal</Typography>
           </Box>
 
         </DialogContent>
@@ -166,18 +166,21 @@ export default function CustomizedDialogs(props) {
               autoFocus
               onClick={resetFilter}
               variant="outlined"
-              style={{ color: '#82786A', borderColor: '#82786A' }}
+              color='shade50'
+              sx={{":hover" : {borderColor : 'shade50.main'} }}
             >
-              <Typography variant="body">Clear</Typography>
+              <Typography variant="body" sx={{letterSpacing : '1.25px'}}>Clear</Typography>
             </Button>
           </Fade>
 
           <Button
             autoFocus onClick={showRecipes}
             variant="contained"
-            style={{ backgroundColor: '#82786A' }}
+            color='shade50'
+            sx={{letterSpacing : '1.25px'}}
           >
-            Show Recipes
+
+            <Typography variant="body" sx={{letterSpacing : '1.25px'}}>Show Recipes</Typography>
           </Button>
         </DialogActions>
 

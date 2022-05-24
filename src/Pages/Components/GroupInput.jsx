@@ -49,13 +49,13 @@ function GroupInput(props) {
                 onKeyPress={handleKeyPress}
 
                 placeholder="Search"
-                sx={{ backgroundColor: 'white' }}
+                sx={{ backgroundColor: 'base1.main' }}
 
                 startAdornment={<SearchIcon />}
                 endAdornment={
                     <Fade in={isInputEmpty}>
-                        <IconButton aria-label="delete" onClick={clearInput}>
-                            <CancelIcon />
+                        <IconButton aria-label="clearInput" onClick={clearInput}>
+                            <CancelIcon color='shade40' fontSize="small"/>
                         </IconButton>
                     </Fade>
                 }

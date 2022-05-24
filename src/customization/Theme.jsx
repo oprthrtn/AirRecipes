@@ -1,14 +1,31 @@
 import { createTheme } from '@mui/material/styles';
 
 const plt = {
-    base0: '#000000',
-    base1: '#FFFFFF',
-    shade20: '#DDDDDD',
-    shade40: '#A9A9A9',
-    shade50: '#82786A',
-    easy: '#2FB65D',
-    medium: '#EB8A31',
-    hard: '#EB3C31',
+    base0: {
+        main: '#000000'
+    },
+    base1: {
+        main: '#FFFFFF'
+    },
+    shade20: {
+        main: '#DDDDDD'
+    },
+    shade40: {
+        main: '#A9A9A9',
+    },
+    shade50: {
+        main: '#82786A',
+        contrastText : '#fff'
+    },
+    easy: {
+        main: '#2FB65D'
+    },
+    medium: {
+        main: '#EB8A31'
+    },
+    hard: {
+        main: '#EB3C31'
+    },
 }
 export const theme = createTheme({
     typography: {
@@ -52,12 +69,12 @@ export const theme = createTheme({
             lineHeight: '11px'
         }
     },
-    palette: {...plt},
+    palette: { ...plt },
     components: {
         MuiSlider: {
             styleOverrides: {
                 root: {
-                    color: '#82786A',
+                    color: plt.shade50.main,
                     height: 1,
                 },
                 thumb: {
@@ -81,7 +98,7 @@ export const theme = createTheme({
                     width: 32,
                     height: 32,
                     borderRadius: '50% 50% 50% 0',
-                    backgroundColor: '#82786A',
+                    backgroundColor: plt.shade50.main,
                     transformOrigin: 'bottom left',
                     transform: 'translate(50%, -80%) rotate(-45deg) scale(0)',
                     '&:before': { display: 'none' },
@@ -97,41 +114,40 @@ export const theme = createTheme({
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
-                    color: plt.shade20,
+                    color: plt.shade20.main,
                     borderRadius: '28px',
                     '&.Mui-focused .MuiOutlinedInput-input': {
-                        color: plt.base0,
+                        color: plt.base0.main,
                     },
 
                     '&:hover .MuiOutlinedInput-notchedOutline': {
-                        borderColor: plt.shade40,
+                        borderColor: plt.shade40.main,
                     },
                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                        borderColor: plt.shade40,
+                        borderColor: plt.shade40.main,
                         borderWidth: '1px'
                     }
 
                 },
                 notchedOutline: {
-                    borderColor: plt.shade20,
+                    borderColor: plt.shade20.main,
                 },
                 input: {
                     color: plt.base0,
                     '&::placeholder': {
-                        color: plt.shade40
+                        color: plt.shade40.main
                     }
                 }
             }
         },
-        MuiIconButton : {
+        MuiIconButton: {
             styleOverrides: {
                 root: {
-                    transition : '0.1s',
+                    transition: '0.1s',
                     '&:hover ': {
-                    
-                       backgroundColor : plt.shade20
+                        backgroundColor: plt.shade20.main
                     },
-                    
+
                 }
             }
         }

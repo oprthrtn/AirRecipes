@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 function Header(props) {
     const [headerState, setHeaderState] = useState('headerDefault');
-    let difficultyOfhoosenRecipe = props.choosenRecipe.difficulty ? props.choosenRecipe.difficulty : 'none';
+    let difficultyOfhoosenRecipe = props.choosenRecipe.difficulty ? `${props.choosenRecipe.difficulty}.main` : 'none';
 
     function handeScroll() {
         let currentScroll = document.documentElement.scrollTop;
@@ -29,7 +29,7 @@ function Header(props) {
             <Typography
                 className='headerText'
                 variant={props.variant}
-                color={(headerState === 'headerCompressed' && difficultyOfhoosenRecipe !== 'none') ? 'base1' : 'base0'}
+                color={(headerState === 'headerCompressed' && difficultyOfhoosenRecipe !== 'none') ? 'base1.main' : 'base0.main'}
             >{props.children}
             </Typography>
         )

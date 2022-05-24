@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import {Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -11,7 +11,7 @@ function CuisineCheckboxes(props) {
   const dispatch = useDispatch();
   function changeCheckbox(cuisineTag) {
     props.setFilterIsChanged(true);
-    dispatch(ChangeCuisineTagThunkCreator(props.filter, cuisineTag))
+    dispatch(ChangeCuisineTagThunkCreator(props.filter, cuisineTag));
   }
 
   return (
@@ -36,9 +36,9 @@ function CuisineCheckboxes(props) {
                 onClick={() => { changeCheckbox(cuisine) }}
                 sx={{
                   px: 0,
-                  color: 'shade40',
+                  color: 'shade40.main',
                   '&.Mui-checked': {
-                    color: 'shade50',
+                    color: 'shade50.main',
                   },
                 }}
               />

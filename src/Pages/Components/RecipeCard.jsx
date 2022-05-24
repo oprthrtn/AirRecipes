@@ -15,7 +15,6 @@ import Fade from '@mui/material/Fade';
 function RecipeCard(props) {
   let navigate = useNavigate();
   const [imageIsLoaded, setImageIsLoaded] = useState(false);
-
   function click(recipeId) {
     navigate('/' + recipeId, { replace: false });
   }
@@ -25,11 +24,11 @@ function RecipeCard(props) {
   }
 
   useEffect(() => {
-    setImageIsLoaded(false)
+    setImageIsLoaded(false);
   }, [])
 
   return (
-    <Fade in={true}>
+    <Fade in={true} timeout={700}>
       <CardActionArea sx={props.cardStyle} onClick={() => { click(props.recipe.id) }}>
         <Card sx={props.cardStyle}>
 
@@ -60,9 +59,9 @@ function RecipeCard(props) {
               right: '16px',
               top: '146px'
             }}>
-            <Chip label={props.recipe.cookTime} sx={{ bgcolor: 'base1' }} />
-            <Chip label={`${props.recipe.caloricity} kCal`} sx={{ bgcolor: 'base1' }} />
-            <Chip label={props.recipe.cuisine.title} sx={{ bgcolor: 'base1' }} />
+            <Chip label={props.recipe.cookTime} sx={{ bgcolor: 'base1.main' }} />
+            <Chip label={`${props.recipe.caloricity} kCal`} sx={{ bgcolor: 'base1.main' }} />
+            <Chip label={props.recipe.cuisine.title} sx={{ bgcolor: 'base1.main' }} />
           </Stack>
 
           <CardContent align="left" sx={{ p: '24px' }}>
